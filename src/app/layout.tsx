@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import "@/styles/globals.css";
 import { Inter as FontSans } from "next/font/google";
 import { cn } from "@/lib/utils";
+import PageWrapper from "@/components/PageWrapper";
 
 const fontSans = FontSans({
   subsets: ["latin"],
@@ -22,12 +23,12 @@ export default function RootLayout({
     <html lang="en">
       <body
         className={cn(
-          "min-h-screen bg-white font-sans antialiased",
+          "min-h-screen bg-white font-sans antialiased text-zinc-600",
           process.env.NODE_ENV === "development" && "debug-screens",
           fontSans.variable
         )}
       >
-        {children}
+        <PageWrapper>{children}</PageWrapper>
       </body>
     </html>
   );
