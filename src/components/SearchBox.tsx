@@ -1,13 +1,10 @@
 "use client";
 
-import { Check, ChevronsUpDown } from "lucide-react";
-
-import { cn } from "@/lib/utils";
+import { Check, ChevronsUpDown, CircleX, Loader2 } from "lucide-react";
+import { cn } from "@/utils/utils";
 import { Button } from "@/components/ui/button";
 import {
   Command,
-  CommandEmpty,
-  CommandGroup,
   CommandInput,
   CommandItem,
   CommandList,
@@ -22,14 +19,12 @@ import { useState } from "react";
 type SearchBoxProps = {
   value: string;
   setValue: (value: string) => void;
-  medicines: {
-    value: string;
-    label: string;
-  }[];
+  medicines: string[];
+  status: "error" | "success" | "pending";
 };
 
 const SearchBox = (props: SearchBoxProps) => {
-  const { value, setValue, medicines } = props;
+  const { value, setValue, medicines, status } = props;
 
   const [open, setOpen] = useState(false);
 
@@ -43,7 +38,7 @@ const SearchBox = (props: SearchBoxProps) => {
           className="w-[800px] mx-auto justify-between"
         >
           {value
-            ? medicines.find((medicine) => medicine.value === value)?.label
+            ? medicines.find((medicine) => medicine === value)
             : "Select medicine..."}
           <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
         </Button>
@@ -51,26 +46,40 @@ const SearchBox = (props: SearchBoxProps) => {
       <PopoverContent className="p-0 w-[800px]">
         <Command>
           <CommandInput placeholder="Search for medicine..." />
-          <CommandEmpty>No medicine found.</CommandEmpty>
           <CommandList>
-            {medicines.map((medicine) => (
-              <CommandItem
-                key={medicine.value}
-                value={medicine.value}
-                onSelect={(currentValue) => {
-                  setValue(currentValue === value ? "" : currentValue);
-                  setOpen(false);
-                }}
-              >
-                <Check
-                  className={cn(
-                    "mr-2 h-4 w-4",
-                    value === medicine.value ? "opacity-100" : "opacity-0"
-                  )}
-                />
-                {medicine.label}
-              </CommandItem>
-            ))}
+            {status === "pending" && (
+              <div className="flex gap-2 items-center py-8 justify-center">
+                <Loader2 className="size-4 text-blue-500 animate-spin" />
+                <p className="text-sm text-zinc-600">Loading medications...</p>
+              </div>
+            )}
+            {status === "error" && (
+              <div className="flex gap-2 items-center py-8 justify-center">
+                <CircleX className="size-4 text-red-500" />
+                <p className="text-sm text-red-600">
+                  Unable to load medications. Try again later!
+                </p>
+              </div>
+            )}
+            {status === "success" &&
+              medicines.map((medicine) => (
+                <CommandItem
+                  key={medicine}
+                  value={medicine}
+                  onSelect={(currentValue) => {
+                    setValue(currentValue === value ? "" : currentValue);
+                    setOpen(false);
+                  }}
+                >
+                  <Check
+                    className={cn(
+                      "mr-2 h-4 w-4",
+                      value === medicine ? "opacity-100" : "opacity-0"
+                    )}
+                  />
+                  {medicine}
+                </CommandItem>
+              ))}
           </CommandList>
         </Command>
       </PopoverContent>
