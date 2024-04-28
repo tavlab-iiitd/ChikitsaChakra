@@ -1,7 +1,5 @@
 "use client";
 
-import { Check, ChevronsUpDown, CircleX, Loader2 } from "lucide-react";
-import { cn } from "@/utils/utils";
 import { Button } from "@/components/ui/button";
 import {
   Command,
@@ -14,7 +12,9 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import { useRef, useState } from "react";
+import { cn } from "@/utils/utils";
+import { Check, ChevronsUpDown, CircleX, Loader2 } from "lucide-react";
+import { useState } from "react";
 
 type SearchBoxProps = {
   value: string;

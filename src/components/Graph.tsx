@@ -1,13 +1,13 @@
 "use client";
 
+import { formatDate } from "@/utils/utils";
 import { useQuery } from "@tanstack/react-query";
 import { LineChart } from "@tremor/react";
 import axios from "axios";
 import { CircleX, Loader2 } from "lucide-react";
+import { useEffect } from "react";
 import CustomTooltip from "./CustomTooltip";
 import { Card, CardContent, CardHeader, CardTitle } from "./ui/card";
-import { formatDate } from "@/utils/utils";
-import { useEffect } from "react";
 
 type GraphProps = {
   medicine: string;
