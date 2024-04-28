@@ -43,7 +43,7 @@ const SearchBox = (props: SearchBoxProps) => {
           <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
         </Button>
       </PopoverTrigger>
-      <PopoverContent className={`p-0 sm:w-[612px] md:w-[714px] lg:w-[800px]`}>
+      <PopoverContent className={`p-0 lg:w-[640px] md:w-[560px] sm:w-[400px]`}>
         <Command>
           <CommandInput placeholder="Search for medicine..." />
           <CommandList>
