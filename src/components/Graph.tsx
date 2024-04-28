@@ -78,6 +78,7 @@ const Graph = (props: GraphProps) => {
                 verticalShift: 20,
                 xAxisHeight: 48,
               }}
+              showAnimation
             />
           )}
         </CardContent>

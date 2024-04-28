@@ -9,7 +9,7 @@ app = Flask(__name__)
 CORS(app)
 
 
-FILE_PATH = "dummy.csv"
+FILE_PATH = "data.csv"
 
 @app.route('/api/prediction', methods=['GET'])
 def getMedicinePredictions():
@@ -27,7 +27,7 @@ def getMedicinePredictions():
 
 # model_prophet
 def predictMedicine(medicine):
-    data = pd.read_csv("dummy.csv", parse_dates=['date_time'])
+    data = pd.read_csv(FILE_PATH, parse_dates=['date_time'])
 
     # Convert date_time to year-month format
     data['year_month'] = data['date_time'].dt.to_period('M')
