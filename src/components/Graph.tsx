@@ -43,7 +43,7 @@ const Graph = (props: GraphProps) => {
   });
 
   return (
-    <div className="p-1.5 w-[800px] mx-auto bg-zinc-100 border border-zinc-200 rounded-lg shadow-sm">
+    <div className="p-1.5 lg:w-[800px] mx-auto bg-zinc-100 border border-zinc-200 rounded-lg shadow-sm">
       <Card className="border w-full border-zinc-200 shadown-none">
         <CardHeader className="flex flex-row justify-between items-center">
           <CardTitle className="text-zinc-800 w-fit capitalize">

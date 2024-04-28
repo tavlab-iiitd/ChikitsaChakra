@@ -20,7 +20,7 @@ export default function Home() {
   });
 
   return (
-    <div className="mt-8 flex flex-col">
+    <div className="sm:mt-8 mt-4 flex flex-col">
       <h1 className="mb-10 text-3xl font-bold text-zinc-800">Dashboard</h1>
       <div className="flex flex-col">
         <SearchBox
@@ -29,9 +29,9 @@ export default function Home() {
           medicines={medications || []}
           status={status}
         />
-        <div className="mt-20">
+        <div className="sm:mt-20 mt-14">
           {!selectedMedicine && (
-            <div className="border border-dashed rounded-lg w-[800px] mx-auto border-zinc-300 py-52 flex items-center justify-center text-zinc-500 gap-2">
+            <div className="border border-dashed rounded-lg w-full lg:w-[800px] mx-auto border-zinc-300 py-52 flex items-center justify-center text-zinc-500 gap-2">
               <TextSearch className="size-4 text-zinc-500" />
               Please select a medicine to view the prediction graph.
             </div>

@@ -14,7 +14,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import { useState } from "react";
+import { useRef, useState } from "react";
 
 type SearchBoxProps = {
   value: string;
@@ -26,7 +26,7 @@ type SearchBoxProps = {
 const SearchBox = (props: SearchBoxProps) => {
   const { value, setValue, medicines, status } = props;
 
-  const [open, setOpen] = useState(false);
+  const [open, setOpen] = useState<boolean>(false);
 
   return (
     <Popover open={open} onOpenChange={setOpen}>
@@ -35,7 +35,7 @@ const SearchBox = (props: SearchBoxProps) => {
           variant="outline"
           role="combobox"
           aria-expanded={open}
-          className="w-[800px] mx-auto justify-between"
+          className="lg:w-[800px] w-full mx-auto justify-between"
         >
           {value
             ? medicines.find((medicine) => medicine === value)
@@ -43,7 +43,7 @@ const SearchBox = (props: SearchBoxProps) => {
           <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
         </Button>
       </PopoverTrigger>
-      <PopoverContent className="p-0 w-[800px]">
+      <PopoverContent className={`p-0 sm:w-[612px] md:w-[714px] lg:w-[800px]`}>
         <Command>
           <CommandInput placeholder="Search for medicine..." />
           <CommandList>
