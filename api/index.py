@@ -4,6 +4,7 @@ import pandas as pd
 import pandas as pd
 import numpy as np
 from prophet import Prophet
+from statsmodels.tsa.holtwinters import ExponentialSmoothing
 
 app = Flask(__name__)
 CORS(app)
@@ -13,20 +14,25 @@ FILE_PATH = "data.csv"
 
 @app.route('/api/prediction', methods=['GET'])
 def getMedicinePredictions():
-    medicine_name = request.args.get('medicine')
+    medicineName = request.args.get('medicine')
+    modelName = request.args.get('model')
     
-    if not medicine_name:
+    print("MODEL NAME: ", modelName)
+    
+    if not medicineName:
         return jsonify({"error": "No medicine provided"}), 400
 
+    if not modelName:
+        return jsonify({"error": "No model provided"}), 400
+
     try:
-        predictions = predictMedicine(medicine_name)
+        predictions = predictMedicine(medicineName, modelName)
         return jsonify(predictions)
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
 
-# model_prophet
-def predictMedicine(medicine):
+def predictMedicine(medicine, model):
     data = pd.read_csv(FILE_PATH, parse_dates=['date_time'])
 
     # Convert date_time to year-month format
@@ -40,16 +46,27 @@ def predictMedicine(medicine):
         return {"error": "No data available for the provided medicine."}
 
     # Aggregate monthly counts for the current medication
-    med_data = data[data['Medication'] == medicine].groupby('year_month').size()
-    med_data = med_data.asfreq('M', fill_value=0).reset_index()
-    med_data.columns = ['ds', 'y']  # Prophet expects columns to be named as 'ds' and 'y'
+    medData = data[data['Medication'] == medicine].groupby('year_month').size()
+    
+    if model == 'prophet':
+        return predictProphet(medData)
+    
+    elif model == 'hot_winters':
+        return predictHotWinters(medData)
+
+
+# model_prophet
+def predictProphet(medData):
+    # Aggregate monthly counts for the current medication
+    medData = medData.asfreq('M', fill_value=0).reset_index()
+    medData.columns = ['ds', 'y']  # Prophet expects columns to be named as 'ds' and 'y'
     
     # Prepare the DataFrame for Prophet
-    med_data['ds'] = med_data['ds'].dt.to_timestamp()
+    medData['ds'] = medData['ds'].dt.to_timestamp()
 
     # Initialize and fit the Prophet model
     model = Prophet(yearly_seasonality=True, weekly_seasonality=False, daily_seasonality=False)
-    model.fit(med_data)
+    model.fit(medData)
 
     # Create future dataframe for forecasting next 4 months
     future = model.make_future_dataframe(periods=4, freq='M')
@@ -62,8 +79,42 @@ def predictMedicine(medicine):
     
     # Returning structured results
     return {
-        'history': med_data.to_dict("records"),
+        'history': medData.to_dict("records"),
         'forecast': forecasted_values.to_dict("records")
+    }
+
+
+# model hot winters
+def predictHotWinters(medData):
+    # Create time series object
+    ts_data = medData.asfreq('M', fill_value=0)
+    
+    if isinstance(ts_data.index, pd.PeriodIndex):
+        ts_data.index = ts_data.index.to_timestamp()
+    
+    historyData = ts_data.reset_index()
+    historyData.columns = ['ds', 'y']
+    
+    # Split data into training and test sets
+    train = ts_data[:'2020-12']
+    test = ts_data['2021-01':'2021-04']
+    
+    # Fit Holt-Winters model
+    model = ExponentialSmoothing(train, trend='add', seasonal_periods=None)
+    fitted_model = model.fit()
+    
+    # Forecast future values
+    forecast_periods = len(test) + 1  # plus one for future month
+    forecast = fitted_model.forecast(forecast_periods)
+    
+    forecast_df = pd.DataFrame({
+        'ds': pd.date_range(start=ts_data['2021-01':].index.min(), periods=forecast_periods, freq='M'),
+        'yhat': forecast
+    })
+    
+    return {
+        'history': historyData.to_dict("records"),
+        'forecast': forecast_df.to_dict("records"),
     }
 
 
