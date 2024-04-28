@@ -11,8 +11,9 @@ const fontSans = FontSans({
 });
 
 export const metadata: Metadata = {
-  title: "TavLab API",
-  description: "Predict cases per medicine",
+  title: "ChikitsaChakra",
+  description:
+    "AI/ML Based Resource Allocation Optimizer for Primary Health Centers",
 };
 
 export default function RootLayout({
