@@ -2,9 +2,9 @@ from flask import Flask, request, jsonify
 from flask_cors import CORS
 import pandas as pd
 import pandas as pd
-import numpy as np
 from prophet import Prophet
 from statsmodels.tsa.holtwinters import ExponentialSmoothing
+from waitress import serve
 
 app = Flask(__name__)
 CORS(app)
@@ -140,4 +140,4 @@ def getUniqueMedications():
 
 
 if __name__ == '__main__':
-    app.run(debug=True, port=8080)
+    serve(app, host="0.0.0.0", port=8080)
