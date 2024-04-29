@@ -30,7 +30,7 @@ export default function Home() {
   const { data: medications, status } = useQuery({
     queryKey: ["medications"],
     queryFn: async () => {
-      const { data } = await axios.get("http://localhost:8080/api/medications");
+      const { data } = await axios.get("api/medications");
       const { medicines } = data;
       return medicines as string[];
     },

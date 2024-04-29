@@ -43,7 +43,7 @@ const Graph = (props: GraphProps) => {
     queryKey: [`${medicine}-${model}-prediction`],
     queryFn: async () => {
       const { data } = await axios.get(
-        `http://localhost:8080/api/prediction?medicine=${medicine.toLowerCase()}&model=${model.toLowerCase().split(" ").join("_")}`
+        `api/prediction?medicine=${medicine.toLowerCase()}&model=${model.toLowerCase().split(" ").join("_")}`
       );
       console.log(data);
       return data as Prediction;
