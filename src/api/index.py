@@ -16,9 +16,7 @@ FILE_PATH = "data.csv"
 def getMedicinePredictions():
     medicineName = request.args.get('medicine')
     modelName = request.args.get('model')
-    
-    print("MODEL NAME: ", modelName)
-    
+        
     if not medicineName:
         return jsonify({"error": "No medicine provided"}), 400
 
