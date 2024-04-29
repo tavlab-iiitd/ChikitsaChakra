@@ -61,15 +61,17 @@ def predictProphet(medData):
     
     # Prepare the DataFrame for Prophet
     medData['ds'] = medData['ds'].dt.to_timestamp()
+    
+    # Split the data into training and testing sets 
+    train_data = medData[medData['ds'] <= pd.Timestamp('2021-06-01')]
+    test_data = medData[medData['ds'] > pd.Timestamp('2020-06-01')]
 
-    # Initialize and fit the Prophet model
+    # Initialize and fit the Prophet model on training data
     model = Prophet(yearly_seasonality=True, weekly_seasonality=False, daily_seasonality=False)
-    model.fit(medData)
+    model.fit(train_data)
 
-    # Create future dataframe for forecasting next 4 months
-    future = model.make_future_dataframe(periods=4, freq='M')
-
-    # Predict
+    # Create future dataframe for forecasting
+    future = model.make_future_dataframe(periods=len(test_data), freq='M')
     forecast = model.predict(future)
 
     # Extract the forecast and the confidence intervals
@@ -98,11 +100,11 @@ def predictHotWinters(medData):
     test = ts_data['2021-01':'2021-04']
     
     # Fit Holt-Winters model
-    model = ExponentialSmoothing(train, trend='add', seasonal_periods=None)
+    model = ExponentialSmoothing(train, trend='add', seasonal='add', seasonal_periods=12)
     fitted_model = model.fit()
     
     # Forecast future values
-    forecast_periods = len(test) + 1  # plus one for future month
+    forecast_periods = len(test)
     forecast = fitted_model.forecast(forecast_periods)
     
     forecast_df = pd.DataFrame({
