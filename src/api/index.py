@@ -100,7 +100,8 @@ def predictHotWinters(medData):
     test = ts_data['2021-01':'2021-04']
     
     # Fit Holt-Winters model
-    model = ExponentialSmoothing(train, trend='add', seasonal='add', seasonal_periods=12)
+    # For actual data, change to: trend='add', seasonal='add', seasonal_periods=12
+    model = ExponentialSmoothing(train, trend='add', seasonal_periods=None)
     fitted_model = model.fit()
     
     # Forecast future values
