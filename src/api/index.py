@@ -39,6 +39,12 @@ def predictMedicine(medicine, model):
     # Filter for non-empty medication entries
     data = data[data['Medication'].notna()]
     data['Medication'] = data['Medication'].str.lower()
+    
+    data['Medication'] = data['Medication'].str.replace("'", '', regex=False)
+    data['Medication'] = data['Medication'].str.replace('.', '', regex=False)
+    data['Medication'] = data['Medication'].str.replace('-', '', regex=False)
+    data['Medication'] = data['Medication'].str.replace(' ', '_', regex=False)
+    data['Medication'] = data['Medication'].str.replace(r"^[\s_]+|[\s_]+$", '', regex=True)
 
     if data.empty:
         return {"error": "No data available for the provided medicine."}
@@ -136,8 +142,12 @@ def getUniqueMedications():
     data = pd.read_csv(FILE_PATH)
     
     if 'Medication' in data.columns:
-        uniqueMedications = data['Medication'].dropna().unique()
-        return list(uniqueMedications)
+        top20MedsIndices = data['Medication'].value_counts().nlargest(25)
+        top20Meds = []
+        for med in top20MedsIndices.index:
+            top20Meds.append(med)
+        print(top20Meds)
+        return list(top20Meds)
     else:
         raise ValueError("The file does not contain a 'Medication' column.")
 
