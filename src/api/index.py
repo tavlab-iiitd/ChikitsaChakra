@@ -146,7 +146,6 @@ def getUniqueMedications():
         top20Meds = []
         for med in top20MedsIndices.index:
             top20Meds.append(med)
-        print(top20Meds)
         return list(top20Meds)
     else:
         raise ValueError("The file does not contain a 'Medication' column.")
