@@ -18,8 +18,9 @@ import Link from "next/link";
 import { useState } from "react";
 
 enum ModelType {
-  Prophet = "Prophet",
-  HotWinters = "Hot Winters",
+  Prophet = "Generalized Additive Model",
+  HotWinters = "Standard Time Series Model",
+  BN = "Dyanmic Bayesian Network Model",
 }
 
 export default function Home() {

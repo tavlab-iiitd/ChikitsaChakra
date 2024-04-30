@@ -35,7 +35,7 @@ const SearchBox = (props: SearchBoxProps) => {
           variant="outline"
           role="combobox"
           aria-expanded={open}
-          className="lg:w-[640px] md:w-[560px] sm:w-[400px] w-full  justify-between"
+          className="lg:w-[640px] md:w-[480px] sm:w-[320px] w-full  justify-between"
         >
           {value
             ? medicines.find((medicine) => medicine === value)

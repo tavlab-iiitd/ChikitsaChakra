@@ -52,10 +52,10 @@ def predictMedicine(medicine, model):
     # Aggregate monthly counts for the current medication
     medData = data[data['Medication'] == medicine].groupby('year_month').size()
     
-    if model == 'prophet':
+    if model == 'generalized_additive_model':
         return predictProphet(medData)
     
-    elif model == 'hot_winters':
+    elif model == 'standard_time_series_model':
         return predictHotWinters(medData)
 
 
